@@ -1,0 +1,4 @@
+flask
+feedparser
+python-dateutil
+deep-translator

@@ -535,25 +535,89 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
         }
+
+        .header-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            position: static;
+            /* Reset absolute positioning */
+        }
+
+        #auth-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .auth-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .auth-link:hover {
+            color: var(--text-primary);
+        }
+
+        .auth-btn {
+            background: var(--accent);
+            color: #0f172a;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-name {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <button class="theme-toggle" onclick="toggleTheme()" title="Temayı Değiştir">
-            <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-        </button>
+        <div class="header-controls">
+            <div id="auth-section">
+                <a href="login.html" class="auth-link">Giriş Yap</a>
+                <a href="signup.html" class="auth-btn">Kayıt Ol</a>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Temayı Değiştir">
+                <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </div>
         <h1>Pulse</h1>
         <div class="subtitle">Seçilmiş Önemli Haber Kaynağı</div>
     </header>
@@ -617,6 +681,37 @@
         const savedTheme = localStorage.getItem('pulse_theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
+
+        // Auth Logic
+        function checkAuth() {
+            const userStr = localStorage.getItem('pulse_user');
+            const authSection = document.getElementById('auth-section');
+
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                const adminLink = user.isAdmin ? '<a href="admin.html" class="auth-link" style="color: var(--accent);">Admin Paneli</a>' : '';
+
+                authSection.innerHTML = `
+                    <div class="user-menu">
+                        ${adminLink}
+                        <span class="user-name">${user.username}</span>
+                        <button onclick="logout()" class="auth-link" style="background:none; border:none; cursor:pointer;">Çıkış</button>
+                    </div>
+                `;
+            } else {
+                authSection.innerHTML = `
+                    <a href="login.html" class="auth-link">Giriş Yap</a>
+                    <a href="signup.html" class="auth-btn">Kayıt Ol</a>
+                `;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('pulse_user');
+            window.location.reload();
+        }
+
+        checkAuth();
 
         function toggleTheme() {
             const current = document.documentElement.getAttribute('data-theme');

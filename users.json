@@ -1,0 +1,16 @@
+[
+  {
+    "username": "adminuser",
+    "email": "admin@example.com",
+    "password": "$2b$10$k7/ulgqaV6zQK7CKI1k.uOJyCpzGzLRMK.UKsqKkeifoeKgm7eSV6",
+    "isAdmin": true,
+    "createdAt": "2025-12-04T04:25:43.421Z"
+  },
+  {
+    "username": "cfindikli",
+    "email": "jfindikli@gmail.com",
+    "password": "$2b$10$nRn5vsyklVD1aMEGqxGRheWA8JjLw9eE8X4Om4F4ougUyCHrGYsBe",
+    "isAdmin": false,
+    "createdAt": "2025-12-04T04:26:40.773Z"
+  }
+]

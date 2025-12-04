@@ -2,8 +2,11 @@ const express = require('express');
 const Parser = require('rss-parser');
 const { translate } = require('@vitalets/google-translate-api');
 const path = require('path');
+const fs = require('fs');
+const bcrypt = require('bcryptjs');
 
 const app = express();
+app.use(express.json()); // Enable JSON body parsing
 const parser = new Parser({
     customFields: {
         item: [
@@ -151,6 +154,106 @@ setInterval(fetchAndCacheNews, REFRESH_INTERVAL); // Repeat every 15 mins
 app.get('/api/news', (req, res) => {
     // Return cached data immediately
     res.json(newsCache.data);
+});
+
+// --- User Management ---
+
+const USERS_FILE = path.join(__dirname, 'users.json');
+
+// Helper: User Store
+const UserStore = {
+    getUsers: () => {
+        try {
+            if (!fs.existsSync(USERS_FILE)) return [];
+            const data = fs.readFileSync(USERS_FILE, 'utf8');
+            return JSON.parse(data);
+        } catch (e) {
+            console.error("Error reading users file:", e);
+            return [];
+        }
+    },
+    saveUsers: (users) => {
+        try {
+            fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+        } catch (e) {
+            console.error("Error writing users file:", e);
+        }
+    },
+    findUser: (email) => {
+        const users = UserStore.getUsers();
+        return users.find(u => u.email === email);
+    },
+    createUser: async (username, email, password) => {
+        const users = UserStore.getUsers();
+        if (users.find(u => u.email === email)) {
+            throw new Error('User already exists');
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = { username, email, password: hashedPassword, isAdmin: false, createdAt: new Date() };
+        users.push(newUser);
+        UserStore.saveUsers(users);
+        return newUser;
+    },
+    deleteUser: (email) => {
+        let users = UserStore.getUsers();
+        const initialLength = users.length;
+        users = users.filter(u => u.email !== email);
+        if (users.length !== initialLength) {
+            UserStore.saveUsers(users);
+            return true;
+        }
+        return false;
+    }
+};
+
+// Auth Endpoints
+app.post('/api/auth/signup', async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+        await UserStore.createUser(username, email, password);
+        res.status(201).json({ message: 'User created successfully' });
+    } catch (e) {
+        res.status(400).json({ error: e.message });
+    }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = UserStore.findUser(email);
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        // In a real app, we would issue a JWT here. For simplicity, we'll just return success
+        // and let the frontend handle "logged in" state via localStorage.
+        res.json({ message: 'Login successful', username: user.username, email: user.email, isAdmin: user.isAdmin });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Admin Endpoints
+app.get('/api/admin/users', (req, res) => {
+    // In a real app, verify admin token here.
+    const users = UserStore.getUsers().map(u => ({ username: u.username, email: u.email, isAdmin: u.isAdmin, createdAt: u.createdAt }));
+    res.json(users);
+});
+
+app.delete('/api/admin/users/:email', (req, res) => {
+    const { email } = req.params;
+    const success = UserStore.deleteUser(email);
+    if (success) {
+        res.json({ message: 'User deleted' });
+    } else {
+        res.status(404).json({ error: 'User not found' });
+    }
 });
 
 app.listen(PORT, () => {

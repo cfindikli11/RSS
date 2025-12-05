@@ -9,7 +9,7 @@
         "dev:frontend": "vite",
         "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
         "build:frontend": "vite build",
-        "start": "NODE_ENV=production node src/backend/app.js",
+        "start": "npm run seed && NODE_ENV=production node src/backend/app.js",
         "migrate": "node src/backend/scripts/migrate.js",
         "seed": "node src/backend/scripts/seed.js",
         "legacy": "node server.js"

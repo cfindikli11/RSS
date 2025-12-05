@@ -1,0 +1,186 @@
+@import './components.css';
+
+/* Additional application-specific styles */
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Button Styles */
+.btn-primary,
+.btn-secondary {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--border-hover);
+}
+
+/* Grid Utilities */
+.grid {
+    display: grid;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gap-4 {
+    gap: var(--spacing-2);
+}
+
+.gap-6 {
+    gap: var(--spacing-3);
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    .md\\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .md\\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* Flex Utilities */
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+/* Spacing */
+.px-4 {
+    padding-left: var(--spacing-2);
+    padding-right: var(--spacing-2);
+}
+
+.py-4 {
+    padding-top: var(--spacing-2);
+    padding-bottom: var(--spacing-2);
+}
+
+.py-8 {
+    padding-top: var(--spacing-4);
+    padding-bottom: var(--spacing-4);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-1);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-2);
+}
+
+.mb-6 {
+    margin-bottom: var(--spacing-3);
+}
+
+.mb-8 {
+    margin-bottom: var(--spacing-4);
+}
+
+/* Position */
+.sticky {
+    position: sticky;
+}
+
+.top-0 {
+    top: 0;
+}
+
+/* Sizing */
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.max-w-md {
+    max-width: 28rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+/* Text */
+.text-center {
+    text-align: center;
+}
+
+.text-sm {
+    font-size: var(--text-sm);
+}
+
+.text-xl {
+    font-size: var(--text-xl);
+}
+
+.text-3xl {
+    font-size: var(--text-3xl);
+}
+
+.text-4xl {
+    font-size: var(--text-4xl);
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+/* Display */
+.block {
+    display: block;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}

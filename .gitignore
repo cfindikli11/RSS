@@ -1,6 +1,39 @@
+# Dependencies
 node_modules/
+
+# Environment
 .env
+.env.local
+
+# Database
+data/
+*.db
+*.sqlite
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Build outputs
+dist/
+build/
+src/frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
-__pycache__/
-*.pyc
-venv/
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# User data
+users.json.backup

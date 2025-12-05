@@ -9,7 +9,7 @@ export class MarketTicker {
 
     async fetchMarketData() {
         try {
-            const res = await fetch(`${api.baseURL}/market`);
+            const res = await fetch(`${api.baseURL}/api/v1/market`);
             if (!res.ok) throw new Error('Failed to fetch market data');
             return await res.json();
         } catch (error) {

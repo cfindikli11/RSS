@@ -6,9 +6,9 @@
     "type": "module",
     "scripts": {
         "dev:backend": "NODE_ENV=development node --watch src/backend/app.js",
-        "dev:frontend": "cd src/frontend && vite",
+        "dev:frontend": "vite",
         "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-        "build:frontend": "cd src/frontend && vite build",
+        "build:frontend": "vite build",
         "start": "NODE_ENV=production node src/backend/app.js",
         "migrate": "node src/backend/scripts/migrate.js",
         "seed": "node src/backend/scripts/seed.js",
